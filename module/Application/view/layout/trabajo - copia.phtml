@@ -1,0 +1,28 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es_ES">
+    <head>
+        <?php echo $this->headMeta()->setCharset('utf8')?>
+        <?php echo $this->headTitle($this->title)?>
+       
+        <?php //echo $this->headMeta()->appendName('keywords', 'framework, PHP, productivity');?>
+        <?php //echo $this->headMeta()->setProperty('og:title', 'my article title');?> 
+        <?php //echo $this->headMeta()->setProperty('og:type', 'article');?>   
+        <?php echo $this->headLink()->prependStylesheet($this->basePath().'/css/estilos.css')?>
+        <?php //echo $this->headStyle()?>
+        <?php echo $this->headScript()->prependFile($this->basePath().'/js/jquery.min.js')?>
+    </head>
+    <body>
+        <div class="file" style="background-color: green;">Encabezado</div>
+        
+        <div class="content">
+        <h1>Saludo : <?php echo $this->saludo?></h1>
+        <?php echo $this->content?>
+        
+        </div>
+        
+        
+        <div class="footer">footer</div>
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>
