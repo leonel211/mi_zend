@@ -4,6 +4,8 @@ namespace Formulario\Modelo;
 
 use Zend\InputFilter\Factory as InputFactory;
 
+use Zend\Form\Form;
+
 use Zend\InputFilter\Input;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
@@ -23,6 +25,7 @@ class Profile implements InputFilterAwareInterface
     public function exchangeArray($data)
     {
        $this->profilename  = (isset($data['profilename']))  ? $data['profilename']     : null;
+        $this->fileupload  = (isset($data['genero']))  ? $data['genero']     : null;
        $this->fileupload  = (isset($data['fileupload']))  ? $data['fileupload']     : null;
     } 
     
@@ -127,20 +130,9 @@ class Profile implements InputFilterAwareInterface
                     ),
                 ),
             )));
-                        
-            $inputFilter->add(
-                $factory->createInput(array(
-                    'name'     => 'fileupload',
-                    'required' => true,
-                ))
-            );
 
-          /*  $inputFilter->add(
-                $factory->createInput(array(
-                    'name'     => 'pass',
-                    'required' => true,
-                ))
-            );  */
+
+
 
 
             $inputFilter->add($factory->createInput(array(
@@ -160,7 +152,7 @@ class Profile implements InputFilterAwareInterface
                             /*'max' => 20,*/
                             'messages' => array(
                                 'stringLengthTooShort' => 'La contraseña debe ser de por lo menos 8 caracteres!'
-                                /*'stringLengthTooLong' => 'Please enter User Name between 4 to 20 character!'*/
+                                /*'stringLengthTooLong' => 'Por favor introduce una contraseña de entre 8 y 20 caracteres'*/
                             ),
                         ),
 
@@ -172,7 +164,7 @@ class Profile implements InputFilterAwareInterface
                         'name' =>'NotEmpty',
                         'options' => array(
                             'messages' => array(
-                                \Zend\Validator\NotEmpty::IS_EMPTY => 'La contraseña es obligatoria!'
+                                \Zend\Validator\NotEmpty::IS_EMPTY => 'La contraseña es obligatoria!',
                             ),
                         ),
                     ),
@@ -182,10 +174,137 @@ class Profile implements InputFilterAwareInterface
                 ),
             )));
 
-            
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'genero',
+                'validators' => array(
+
+                    array(
+                        'name'    => 'InArray',
+                        'options' => array(
+                            'haystack' => array("m","f"),
+                            'messages' => array(
+                                \Zend\Validator\InArray::NOT_IN_ARRAY => 'Por favor indique su genero !'
+                            ),
+                        ),
+                        'break_chain_on_failure' => true
+                    ),
+
+                    array(
+                        'name' =>'NotEmpty',
+                        'options' => array(
+                            'messages' => array(
+                                \Zend\Validator\NotEmpty::IS_EMPTY => 'La opcion es incorrecta para elegir genero!',
+                            ),
+                        ),
+                    ),
+
+                ),
+            )));
+
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'lenguaje',
+                'required' => true,
+                'validators' => array(
+
+                    array(
+                        'name' =>'NotEmpty',
+                        'options' => array(
+                            'messages' => array(
+                                \Zend\Validator\NotEmpty::IS_EMPTY => 'Por favor indique su idioma materno!',
+                            ),
+                        ),
+                        'break_chain_on_failure' => true
+                    ),
+                ),
+            )));
+
+
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'pais',
+                'validators' => array(
+
+                    array(
+                        'name'    => 'InArray',
+                        'options' => array(
+                            'haystack' => array(1,2,3,4),
+                            'messages' => array(
+                                \Zend\Validator\InArray::NOT_IN_ARRAY => 'Por favor indique su pais !'
+                            ),
+                        ),
+                        'break_chain_on_failure' => true
+                    ),
+
+                    array(
+                        'name' =>'NotEmpty',
+                        'options' => array(
+                            'messages' => array(
+                                \Zend\Validator\NotEmpty::IS_EMPTY => 'La opcion es incorrecta!',
+                            ),
+                        ),
+                    ),
+
+                ),
+            )));
+
+              $inputFilter->add(
+                $factory->createInput(array(
+                    'name'     => 'preferencias',
+                    'required' => false,
+                ))
+            );
+
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'condiciones',
+                'validators' => array(
+
+                    array(
+                        'name'    => 'InArray',
+                        'options' => array(
+                            'haystack' => array("si","no"),
+                            'messages' => array(
+                                \Zend\Validator\InArray::NOT_IN_ARRAY => 'Debe aceptar las condiciones para continuar !'
+                            ),
+                        ),
+                        'break_chain_on_failure' => true
+                    ),
+
+                    array(
+                        'name' =>'NotEmpty',
+                        'options' => array(
+                            'messages' => array(
+                                \Zend\Validator\NotEmpty::IS_EMPTY => 'La opcion es incorrecta!',
+                            ),
+                        ),
+                    ),
+
+                ),
+            )));
+
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'fileupload',
+                'required' => true,
+                'validators' => array(
+
+                    array(
+                        'name' =>'NotEmpty',
+                        'options' => array(
+                            'messages' => array(
+                                \Zend\Validator\NotEmpty::IS_EMPTY => 'Por favor suba su archivo!',
+                            ),
+                        ),
+                        'break_chain_on_failure' => true
+                    ),
+                ),
+            )));
+
+
             $this->inputFilter = $inputFilter;
         }
-        
+
         return $this->inputFilter;
     }
     

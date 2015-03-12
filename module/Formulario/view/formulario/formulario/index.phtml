@@ -1,1 +1,46 @@
-hass
+<h1><?php
+    echo $this->titulo."<br>";
+    echo "Poner Datatables";
+    ?>
+</h1>
+<table style="width:400px; text-align:left; padding: 10px; margin: 10px;">
+    <tr>
+        <th>Id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Nombre</th>
+        <th>E-Mail</th>
+        <th>Contraseña</th>
+
+        <th>Genero</th>
+        <th>Idioma</th>
+        <th>País</th>
+        <th>Preferencias</th>
+        <th>Nombre de Archivo</th>
+        <th>Acepta las condiciones</th>
+        <th>Acciones</th>
+    </tr>
+    <?php foreach ($this->datos as $dato){ ?>
+        <tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+
+            <td><?php echo $dato["id"] ?></td>
+            <td><?php echo $dato["nombre"] ?></td>
+            <td><?php echo $dato["correo"] ?></td>
+            <td><?php echo $dato["password"] ?></td>
+
+            <td><?php echo $dato["genero"] ?></td>
+            <td><?php echo $dato["idioma"] ?></td>
+            <td><?php echo $dato["pais"] ?></td>
+            <td><?php echo $dato["preferencias"] ?></td>
+            <td><?php echo $dato["nombre_archivo"] ?></td>
+            <td><?php echo $dato["acepta_condiciones"] ?></td>
+
+            <td>
+                <a href="<?php echo $this->basePath() ?>/formulario/formulario/ver/<?php echo $dato["id"]?>">ver</a>
+            </td>
+        </tr>
+    <?php } ?>
+
+    <?php
+    $this->cycle()->assign(array("#F0F0F0", "#FFFFFF"));
+    $this->cycle()->prev();
+    ?>
+</table>

@@ -55,12 +55,30 @@ class Formularios extends Form
                 'class' => 'form-control'
             ),
         ));
-		 
+
+
+
+
+
 		  //radio button
-        $radio = new Element\Radio('genero');
+       /* $radio = new Element\Radio('genero');
         $radio->setLabel('Cual es tu genero?<br>')
 				->setAttribute('class', 'radio-inline');
-		 $this->add($radio);
+		 $this->add($radio); */
+
+
+
+         $this->add(array(
+             'type' => 'Zend\Form\Element\Radio',
+             'name' => 'genero',
+             'options' => array(
+                 'label' => 'Cual es su genero ?',
+                 'value_options' => array(
+                     'm' => 'Femenino',
+                     'f' => 'Masculino',
+                 ),
+             ),
+         ));
 		 
 		 
 		  //select
@@ -70,7 +88,44 @@ class Formularios extends Form
 			->setAttribute('class', 'form-control');
     //$select->setEmptyOption('Seleccione...');
     $this->add($select);
-	
+
+
+         $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'pais',
+
+             'attributes' => array(
+                 'class' => 'form-control',
+                  'value' => '0',
+
+             ),
+
+             'options' => array(
+                 'label' => 'Cuál es tu país?',
+                 'empty_option' => 'Seleccione un país',
+
+
+                 'value_options' => array(
+                     'european' => array(
+                         'label' => 'Paises Europeos',
+                         'options' => array(
+                             '1' => 'Francia',
+                             '2' => 'Italia',
+                         ),
+                     ),
+                     'asian' => array(
+                         'label' => 'Paises Asiaticos',
+                         'options' => array(
+                             '3' => 'Japon',
+                             '4' => 'China',
+                         ),
+                     ),
+                 ),
+             ),
+
+         ));
+
+/*
 	
 	// select 
      $pais = new Element\Select('pais');
@@ -80,22 +135,22 @@ class Formularios extends Form
      $pais->setEmptyOption('Seleccione...');
      $pais->setValueOptions(array(
       'european' => array(
-         'label' => 'Paise Europeos',
+         'label' => 'Paises Europeos',
          'options' => array(
-            'Francia' => 'Francia',
-            'Italia' => 'Italia',
+            '0' => 'Francia',
+            '1' => 'Italia',
          ),
       ),
       'asian' => array(
          'label' => 'Paises Asiaticos',
          'options' => array(
-            'Japon' => 'Japon',
-            'China' => 'China',
+            '2' => 'Japon',
+            '3' => 'China',
          ),
       ),
      ));
      $this->add($pais);
-
+*/
 		 
 		    //multicheckbox
        $preferencias = new Element\MultiCheckbox('preferencias');
@@ -103,10 +158,24 @@ class Formularios extends Form
         $this->add($preferencias);
 		 
 		 
-		  // checkbox
+		 /* // checkbox
         $condiciones = new Element\Checkbox('condiciones');
         $condiciones->setLabel('Acepto Las Condiciones');
-        $this->add($condiciones);
+        $this->add($condiciones); */
+
+         $this->add(array(
+             'type' => 'Zend\Form\Element\Checkbox',
+             'name' => 'condiciones',
+             'options' => array(
+                 'label' => 'Acepto Las Condiciones',
+                 'use_hidden_element' => false,
+                 'checked_value' => 'si',
+                 'unchecked_value' => 'no'
+             ),
+             'attributes' => array(
+                // 'value' => 'no'
+             )
+         ));
 		 
 		 
 	/*	    // File Input

@@ -22,9 +22,30 @@ use Formulario\Modelo\Entity\Usuarios;  /*  Desde aqui se hace todoo lo concerni
 class FormularioController extends AbstractActionController
 {
     public $dbAdapter;
+
     public function indexAction()
     {
-        return new ViewModel();
+        $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+        $u=new Usuarios($this->dbAdapter);
+        $valores=array
+        (
+            "titulo"    =>  "Mostrando datos desde TableGateway",
+            'datos'     =>  $u->getUsuarios()
+        );
+        return new ViewModel($valores);
+    }
+
+    public function verAction()
+    {
+        $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+        $u=new Usuarios($this->dbAdapter);
+        $id = (int) $this->params()->fromRoute('id', 0);
+        $valores=array
+        (
+            "titulo"    =>  "Mostrando Detalle del usuario",
+            'datos'     =>  $u->getUsuarioPorId($id)
+        );
+        return new ViewModel($valores);
     }
 
     /**
@@ -35,11 +56,14 @@ class FormularioController extends AbstractActionController
         $form=new Formularios();  // Desde aqui se crea la instancia de la clase Formularios
 		
 		/*INICIA EL LLENADO DE OPCIONES DE LOS SELECT Y CHECKBOX*/
-		$form->get("genero")->setValueOptions(array('f'=>'Femenino','m'=>'Masculino'));
+		//$form->get("genero")->setValueOptions(array('f'=>'Femenino','m'=>'Masculino'));
         $form->get("lenguaje")->setValueOptions(array('0'=>'Ingles','1'=>'Espanol'));
 		$form->get("oculto")->setAttribute("value","87");
         $form->get("preferencias")->setValueOptions(array('m'=>'Musica','d'=>'Deporte','o'=>'Ocio'));
 		/*TERMINA EL LLENADO DE OPCIONES DE LOS SELECT Y CHECKBOX*/
+
+
+
         
 		$request = $this->getRequest();
 		if($request->isPost()){ // Se valida cuando se manda el envio del formualario
@@ -55,6 +79,18 @@ class FormularioController extends AbstractActionController
                 $nonFile,
                 array('fileupload'=> $File['name'])
             );
+
+             /*  INICIA PARA EVITAR VALIDACION DE CIERTOS CAMPOS
+            $form->prepare();
+            $input = $form->getInputFilter();
+            $no_filter = $input->get('preferencias');
+            $no_filter->setRequired(false);
+            $no_filter = $input->get('condiciones');
+            $no_filter->setRequired(false);
+              TERMINA PARA EVITAR VALIDACION DE CIERTOS CAMPOS  */
+
+            //var_dump($nonFile);
+            //exit();
 
             //set data post and file ...
             $form->setData($data);
@@ -78,16 +114,29 @@ class FormularioController extends AbstractActionController
                     $adapter->setDestination(dirname(__DIR__).'/uploads');
                     if ($adapter->receive($File['name'])) {
                         $profile->exchangeArray($form->getData());
-                        echo 'Profile Name '.$profile->profilename.' upload '.$profile->fileupload;
-                        //Poner un alert y redirección
 
-                        /*INICIA AGREGAGADO LGS */
+
+                        /*INICIA AGREGADO LGS */
                         $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
                         $u=new Usuarios($this->dbAdapter); // Instancia de la clase usuarios que es la que trabaja con la tablas usuario de la base de  datos
                         $data = $this->request->getPost(); // recupero los datos que vienen del formulario y lo pongo en $data
                         $u->addUsuario($data, $profile->fileupload); // llamo al metodo que inserta en la base de datos
                         //return $this->redirect()->toUrl($this->getRequest()->getBaseUrl().'/formulario/formulario/registro/1');
-                        /*TERMINA AGREGAGADO LGS */
+                        /*TERMINA AGREGADO LGS */
+
+                        //echo 'Profile Name '.$profile->profilename.' upload '.$profile->fileupload;
+                        //echo "<script>alert('Formulario guardado');</script>";
+                        //return $this->redirect()->toUrl($this->getRequest()->getBaseUrl().'/formulario/formulario/registro/1');
+                        //Poner un alert y redirección
+
+                        $this->flashMessenger()->addMessage('El registro se ha insertado satisfactoriamente');
+                        //return $this->redirect()->toRoute('/formulario/formulario/registro', array('controller'=>'Formulario', 'action'=>'thankyou'));
+
+                        return $this->redirect()->toRoute(null, array(
+                            'controller' => 'Formulario',
+                            'action'     => 'thankyou'
+                        ));
+
                     }
                 }
             }
@@ -105,6 +154,19 @@ class FormularioController extends AbstractActionController
         }
 
         return array('form' => $form);
+
+    }
+
+
+    public function thankyouAction() {
+
+        //return new ViewModel();
+
+        $result = new ViewModel();
+        $result->setTerminal(true);
+
+        return $result;
+
 
     }
    

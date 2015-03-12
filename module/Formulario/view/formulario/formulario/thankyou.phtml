@@ -1,0 +1,74 @@
+<?php
+if (!$this->flashMessenger()->hasMessages()) {
+    echo '<meta http-equiv="refresh" content="0; url=http://my.zend/formulario/formulario/registro" />';
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Información Importante</title>
+    <script type='text/javascript' src='http://code.jquery.com/jquery-1.5.2.js'></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/ui-lightness/jquery-ui.css">
+
+
+    <script type='text/javascript'>//<![CDATA[
+        $(window).load(function(){
+            $("#dialog-message").dialog({
+                modal: true,
+                draggable: false,
+                resizable: false,
+                position: ['center', 'top'],
+                show: 'blind',
+                hide: 'blind',
+                width: 400,
+                dialogClass: 'ui-dialog-osx',
+                buttons: {
+                    "Aceptar": function() {
+
+                        window.location.href = "http://my.zend/formulario/formulario/registro";
+
+                    }
+                }
+            });
+        });//]]>
+
+    </script>
+
+
+</head>
+<body>
+
+<div id="dialog-message" title="Información importante">
+    <span class="ui-state-default"><span class="ui-icon ui-icon-info" style="float:left; margin:0 7px 0 0;"></span></span>
+    <div style="margin-left: 23px;">
+        <p>
+            <?php
+            if ($this->flashMessenger()->hasMessages()) {
+                $messages = $this->flashMessenger()->getMessages();
+                foreach($messages as $message) {
+                    echo $message;
+                }
+            }
+            ?>
+
+        </p>
+    </div>
+</div>
+
+</body>
+
+
+</html>
+
+
+<?php
+if (!$this->flashMessenger()->hasMessages()) {
+echo '<meta http-equiv="refresh" content="0; url=http://my.zend/formulario/formulario/registro" />';
+}
+?>
+
+
+
